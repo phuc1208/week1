@@ -1,10 +1,10 @@
-#ASSIGNMENT WEEK 1
+# ASSIGNMENT WEEK 1
 
-###FUNCTION
+### FUNCTION
 - Sign up, login flow
 - Dependency hierarchy
 
-###USAGE
+### USAGE
 - install package dependencies
 > npm install
 - build server
@@ -12,5 +12,5 @@
 - start server
 > npm start
 
-###SWAGGER
+### SWAGGER
 - *http://localhost:3000/docs*
