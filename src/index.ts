@@ -1,5 +1,8 @@
 import 'dotenv/config'
 import Fastify, { FastifyPluginCallback } from 'fastify'
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUi from "@fastify/swagger-ui";
+
 import userRepository, { IUserRepository } from "./userRepository.js";
 import userService, { IUserService } from "./userService.js";
 import userRouter, { UserRouter } from "./userRouter.js";
@@ -28,7 +31,32 @@ const fastify = Fastify({
     logger: true
 });
 
+const swaggerOptions = {
+    swagger: {
+        info: {
+            title: "My Title",
+            description: "My Description.",
+            version: "1.0.0",
+        },
+        host: "localhost",
+        schemes: ["http", "https"],
+        consumes: ["application/json"],
+        produces: ["application/json"],
+        tags: [{ name: "Default", description: "Default" }],
+    },
+};
+
+const swaggerUiOptions = {
+    routePrefix: "/docs",
+    exposeRoute: true,
+};
+
+
+fastify.register(fastifySwagger, swaggerOptions);
+fastify.register(fastifySwaggerUi, swaggerUiOptions);
+
 fastify.register(_userRouter, { prefix: '/auth' });
+
 fastify.setErrorHandler((error, _, reply) => {
     if (error instanceof DomainError) {
         reply.status(error.code)
