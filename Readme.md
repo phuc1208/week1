@@ -3,6 +3,7 @@
 ### FUNCTION
 - Sign up, login flow
 - Dependency hierarchy
+- Unit Testing
 
 ### USAGE
 - install package dependencies
@@ -11,6 +12,8 @@
 > npm run build
 - start server
 > npm start
+- test server
+> npm run test
 
 ### SWAGGER
-- *http://localhost:3000/docs*
+- *http://localhost/docs*
