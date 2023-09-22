@@ -1,15 +1,35 @@
 {
     "compilerOptions": {
         "target": "ES2020",
-        "module": "Node16",
+        "module": "CommonJS",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
         "sourceMap": true,
         "rootDir": "./src",
         "outDir": "./dist",
+        "resolveJsonModule": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
-        "declaration": true
-    },
+        "declaration": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": false,
+        "paths": {
+            "@root": [
+                "./src"
+            ],
+            "@config/*": [
+                "./src/config/*"
+            ],
+            "@lib/*": [
+                "./src/lib/*"
+            ],
+            "@modules/*": [
+                "./src/modules/*"
+            ],
+            "@registry/*": [
+                "./src/registry/*"
+            ]
+        }
+    }
 }

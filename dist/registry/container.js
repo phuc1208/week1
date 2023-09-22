@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function getArgumentNames(func) {
     const funcString = func.toString();
     const argNames = funcString.slice(funcString.indexOf('(') + 1, funcString.indexOf(')')).match(/([^\s,]+)/g);
@@ -18,6 +20,7 @@ function getArgumentType(func) {
 const createContainer = () => {
     const records = {};
     const objectRecords = {};
+    const prefixs = {};
     const result = {
         register(name) {
             const recordType = records[name];
@@ -25,8 +28,11 @@ const createContainer = () => {
                 throw new Error(`Type ${name} has registed`);
             }
             const result = {
-                to(factory) {
+                to(factory, opts) {
                     records[name] = factory;
+                    if (opts) {
+                        prefixs[name] = opts.prefix;
+                    }
                 }
             };
             return result;
@@ -55,10 +61,31 @@ const createContainer = () => {
             const args = getArgumentNames(factory);
             const dependencies = args.map(arg => (this.resolve(arg)));
             const result = factory(...dependencies);
+            objectRecords[name] = result;
             return result;
         },
+        unbind(name) {
+            const factory = records[name];
+            const object = objectRecords[name];
+            if (!factory && !object) {
+                throw new Error(`Type ${name} does not exist`);
+            }
+            if (factory) {
+                delete records[name];
+            }
+            if (object) {
+                delete objectRecords[name];
+            }
+        },
+        loadRoutes(fastify) {
+            Object.keys(records).forEach((name) => {
+                if (name.includes("Router")) {
+                    fastify.register(this.resolve(name), { prefix: prefixs[name] });
+                }
+            });
+        }
     };
     return result;
 };
-export default createContainer;
+exports.default = createContainer;
 //# sourceMappingURL=container.js.map

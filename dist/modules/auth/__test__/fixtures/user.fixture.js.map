@@ -1,0 +1,1 @@
+{"version":3,"file":"user.fixture.js","sourceRoot":"","sources":["../../../../../src/modules/auth/__test__/fixtures/user.fixture.ts"],"names":[],"mappings":";;;AAAA,2CAAwC;AAE3B,QAAA,gBAAgB,GAAG;IAC5B,QAAQ,EAAE,aAAK,CAAC,MAAM,CAAC,MAAM,EAAE;IAC/B,QAAQ,EAAE,aAAK,CAAC,MAAM,CAAC,MAAM,EAAE;CAClC,CAAA"}

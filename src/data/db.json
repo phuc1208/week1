@@ -1,6 +1,12 @@
-[
+{
+  "users": [
     {
-        "username": "phuc@gmail.com",
-        "password": "$2b$10$6Fd116PiA5ij1dGe6htNXegV2kAVP7KoL8jWYUteJni2/FQscBnmK"
+      "username": "phuc12@gmail.com",
+      "password": "$2b$10$QghyhuMRYb//OhGI4k/w1O0XV2m.dO/Gpds3UXwUwHAb/pqkXvnxm"
+    },
+    {
+      "username": "vinhphucit02@gmail.com",
+      "password": "$2b$10$TvltJx8n18C.uSLV.TXW2OjEwNyvfqMcXsVLU5kpUJl/ZfSKUF6OS"
     }
-]
+  ]
+}

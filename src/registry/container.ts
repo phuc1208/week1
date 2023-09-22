@@ -1,5 +1,9 @@
+import { FastifyInstance, FastifyPluginCallback } from "fastify";
+
 interface ContainerRegister<T> {
-    to(factory: (...args: any) => T): void,
+    to(factory: (...args: any) => T, opts?: {
+        prefix: string
+    }): void,
 }
 
 interface ContainerBind<T> {
@@ -31,14 +35,20 @@ function getArgumentType(func: (...args: any[]) => any): string[] {
 export interface Container {
     register<T>(name: string): ContainerRegister<T>,
     bind<T>(name: string): ContainerBind<T>,
-    resolve<T>(name: string): T | undefined
+    resolve<T>(name: string): T | undefined,
+    unbind<T>(name: string): void,
+    loadRoutes(fastify: FastifyInstance): void
 }
+
 const createContainer = (): Container => {
     const records: {
         [x: string]: (...args: any) => any
     } = {};
     const objectRecords: {
         [x: string]: any
+    } = {}
+    const prefixs: {
+        [x: string]: string
     } = {}
 
     const result = {
@@ -49,8 +59,11 @@ const createContainer = (): Container => {
             }
 
             const result = {
-                to(factory: (...args: any) => T): void {
+                to(factory: (...args: any) => T, opts?: { prefix: string }): void {
                     records[name] = factory;
+                    if (opts) {
+                        prefixs[name] = opts.prefix;
+                    }
                 }
             }
 
@@ -86,8 +99,35 @@ const createContainer = (): Container => {
             const dependencies = args.map(arg => (this.resolve(arg)));
 
             const result = factory(...dependencies);
+
+            // cache dependency
+            objectRecords[name] = result;
+
             return result;
         },
+        unbind<T>(name: string): void {
+            const factory = records[name];
+            const object = objectRecords[name];
+
+            if (!factory && !object) {
+                throw new Error(`Type ${name} does not exist`);
+            }
+
+            if (factory) {
+                delete records[name];
+            }
+
+            if (object) {
+                delete objectRecords[name];
+            }
+        },
+        loadRoutes(fastify: FastifyInstance) {
+            Object.keys(records).forEach((name: string) => {
+                if (name.includes("Router")) {
+                    fastify.register(this.resolve(name), { prefix: prefixs[name] });
+                }
+            })
+        }
     }
 
     return result;
